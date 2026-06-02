@@ -1,8 +1,8 @@
 // app/history/page.tsx
 import { prisma } from '@/lib/prisma';
+import { Separation } from '@prisma/client';  // ← Ye line add karo
 
 export default async function HistoryPage() {
-    // Temporary: Hardcoded userId (baad mein Clerk se replace karenge)
     const separations = await prisma.separation.findMany({
         where: { userId: "temp-user-id" },
         orderBy: { createdAt: 'desc' },
@@ -15,7 +15,7 @@ export default async function HistoryPage() {
                 <p>No songs separated yet.</p>
             ) : (
                 <div className="space-y-4">
-                    {separations.map((item) => (
+                    {separations.map((item: Separation) => (  // ← Type add karo
                         <div key={item.id} className="border p-4 rounded-lg">
                             <p className="font-semibold">{item.originalName}</p>
                             <p className="text-sm text-gray-500">
