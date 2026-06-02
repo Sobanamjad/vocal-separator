@@ -3,17 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "PRISMA_CLIENT_ENGINE_TYPE=library next dev",
+    "build": "PRISMA_CLIENT_ENGINE_TYPE=library next build",
+    "postinstall": "PRISMA_CLIENT_ENGINE_TYPE=library prisma generate",
+    "start": "PRISMA_CLIENT_ENGINE_TYPE=library next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.2",
+    "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@vercel/blob": "^2.4.0",
     "demucs-wasm": "^0.1.5",
     "next": "16.2.7",
+    "pg": "^8.21.0",
     "prisma": "^7.8.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"

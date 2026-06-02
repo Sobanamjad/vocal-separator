@@ -1,8 +1,10 @@
 // app/history/page.tsx
-import { prisma } from '@/lib/prisma';
-import { Separation } from '@prisma/client';  // ← Ye line add karo
+import { getPrisma } from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 
 export default async function HistoryPage() {
+    const prisma = getPrisma();
     const separations = await prisma.separation.findMany({
         where: { userId: "temp-user-id" },
         orderBy: { createdAt: 'desc' },
@@ -15,7 +17,7 @@ export default async function HistoryPage() {
                 <p>No songs separated yet.</p>
             ) : (
                 <div className="space-y-4">
-                    {separations.map((item: Separation) => (  // ← Type add karo
+                    {separations.map((item) => (
                         <div key={item.id} className="border p-4 rounded-lg">
                             <p className="font-semibold">{item.originalName}</p>
                             <p className="text-sm text-gray-500">

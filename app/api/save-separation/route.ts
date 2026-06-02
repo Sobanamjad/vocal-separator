@@ -1,9 +1,10 @@
 // app/api/save-separation/route.ts
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { getPrisma } from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
+    const prisma = getPrisma();
     const body = await request.json();
     const { userId, originalName, originalSize, vocalsUrl, instrumentalUrl } = body;
     

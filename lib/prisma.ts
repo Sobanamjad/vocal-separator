@@ -1,14 +1,26 @@
 // lib/prisma.ts
 import { PrismaClient } from '@prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-// Prisma v7 requires an options object
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({
-  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-})
+export function getPrisma() {
+  if (globalForPrisma.prisma) return globalForPrisma.prisma
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma 
+  const connectionString = process.env.DATABASE_URL
+  if (!connectionString) {
+    throw new Error('DATABASE_URL is not set')
+  }
+
+  const adapter = new PrismaPg({ connectionString })
+  const prisma = new PrismaClient({
+    adapter,
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  })
+
+  if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+  return prisma
+}
 
